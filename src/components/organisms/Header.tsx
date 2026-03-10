@@ -1,21 +1,31 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { usePathname, useRouter } from 'next/navigation';
 import { Container, Button } from '../atoms';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const isHomePage = pathname === '/';
+
+  const [isScrolled, setIsScrolled] = useState(!isHomePage);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    if (!isHomePage) {
+      setIsScrolled(true);
+      return;
+    }
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isHomePage]);
 
   const navLinks = [
     { name: 'Beranda', href: '#' },
@@ -27,6 +37,15 @@ export default function Header() {
 
   const scrollToSection = (href: string) => {
     setIsMobileMenuOpen(false);
+    if (!isHomePage) {
+      // Navigate to home page, then scroll to section
+      if (href === '#') {
+        router.push('/');
+      } else {
+        router.push('/' + href);
+      }
+      return;
+    }
     if (href === '#') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;

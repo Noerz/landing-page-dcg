@@ -13,9 +13,24 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
   
   const links = [
-    { title: 'Layanan', items: ['CCTV Installation', 'Network Setup', 'IT Procurement', 'Server Maintenance'] },
-    { title: 'Perusahaan', items: ['Tentang Kami', 'Tim', 'Karir', 'Blog'] },
-    { title: 'Dukungan', items: ['FAQ', 'Kontak', 'Syarat Layanan', 'Kebijakan Privasi'] },
+    { title: 'Layanan', items: [
+      { label: 'CCTV Installation', href: '#' },
+      { label: 'Network Setup', href: '#' },
+      { label: 'IT Procurement', href: '#' },
+      { label: 'Server Maintenance', href: '#' },
+    ] },
+    { title: 'Perusahaan', items: [
+      { label: 'Tentang Kami', href: '#' },
+      { label: 'Tim', href: '#' },
+      { label: 'Karir', href: '#' },
+      { label: 'Blog', href: '#' },
+    ] },
+    { title: 'Dukungan', items: [
+      { label: 'FAQ', href: '/faq' }, 
+      { label: 'Kontak', href: '#' }, 
+      { label: 'Syarat Layanan', href: '#' }, 
+      { label: 'Kebijakan Privasi', href: '#' }
+    ] },
   ];
 
   const socialLinks = [
@@ -87,13 +102,13 @@ export default function Footer() {
               <h4 className="text-white font-bold mb-5 text-lg">{section.title}</h4>
               <ul className="space-y-3">
                 {section.items.map((item) => (
-                  <li key={item}>
+                  <li key={item.label}>
                     <a 
-                      href="#" 
+                      href={item.href} 
                       className="text-gray-400 hover:text-white text-sm transition-colors duration-300 flex items-center gap-2 group"
                     >
                       <span className="w-0 group-hover:w-2 h-0.5 bg-blue-500 transition-all duration-300" />
-                      {item}
+                      {item.label}
                     </a>
                   </li>
                 ))}
@@ -103,52 +118,7 @@ export default function Footer() {
         </div>
 
         {/* Contact Bar */}
-        <motion.div 
-          className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 mb-10 border border-white/10"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          viewport={{ once: true }}
-        >
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                <MapPinIcon className="w-5 h-5 text-blue-400" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Lokasi</p>
-                <Text color="white" size="sm" className="font-medium">Bandung, Indonesia</Text>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
-                <PhoneIcon className="w-5 h-5 text-green-400" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Telepon</p>
-                <Text color="white" size="sm" className="font-medium">+62 814-1321-6961</Text>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                <EnvelopeIcon className="w-5 h-5 text-purple-400" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Email</p>
-                <Text color="white" size="sm" className="font-medium">Digital.companygroup@gmail.com</Text>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 bg-teal-500/20 rounded-lg flex items-center justify-center">
-                <GlobeAltIcon className="w-5 h-5 text-teal-400" />
-              </div>
-              <div>
-                <p className="text-xs text-gray-500">Website</p>
-                <Text color="white" size="sm" className="font-medium">www.digitalcompanygroup.id</Text>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+        
 
         {/* Divider */}
         <div className="border-t border-white/10" />
