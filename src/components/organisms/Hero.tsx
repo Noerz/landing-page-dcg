@@ -60,7 +60,7 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.2 }}
             >
               <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              <span className="text-sm text-white font-medium">🚀 Solusi IT #1 di Indonesia</span>
+              <span className="text-sm text-white font-medium">🚀 Digital Company Group</span>
             </motion.div>
             
             <motion.div
@@ -73,7 +73,9 @@ export default function Hero() {
                 color="white" 
                 className="mb-6 leading-[1.1] text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight"
               >
-                Transformasi{' '}
+                Smart Solution{' '}
+                <br className="hidden md:block" />
+                For a{' '}
                 <span className="relative">
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-200 to-yellow-400">
                     Digital
@@ -87,8 +89,8 @@ export default function Hero() {
                       </linearGradient>
                     </defs>
                   </svg>
-                </span>
-                <br />Bisnis Anda
+                </span>{' '}
+                World
               </Heading>
             </motion.div>
             
