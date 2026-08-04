@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Container, Button } from '../atoms';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
+import ContactModal from './ContactModal';
 
 export default function Header() {
   const pathname = usePathname();
@@ -13,6 +14,7 @@ export default function Header() {
 
   const [isScrolled, setIsScrolled] = useState(!isHomePage);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   useEffect(() => {
     if (!isHomePage) {
@@ -24,7 +26,14 @@ export default function Header() {
     };
     handleScroll();
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    const handleOpenModal = () => setIsContactModalOpen(true);
+    window.addEventListener('openContactModal', handleOpenModal as EventListener);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('openContactModal', handleOpenModal as EventListener);
+    };
   }, [isHomePage]);
 
   const navLinks = [
@@ -37,6 +46,12 @@ export default function Header() {
 
   const scrollToSection = (href: string) => {
     setIsMobileMenuOpen(false);
+
+    if (href === '#contact') {
+      setIsContactModalOpen(true);
+      return;
+    }
+
     if (!isHomePage) {
       // Navigate to home page, then scroll to section
       if (href === '#') {
@@ -62,32 +77,25 @@ export default function Header() {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled 
-            ? 'bg-white/95 backdrop-blur-md shadow-lg' 
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+            ? 'bg-white/95 backdrop-blur-md shadow-lg'
             : 'bg-transparent'
-        }`}
+          }`}
       >
         <Container>
           <nav className="flex items-center justify-between py-4">
             {/* Logo */}
-            <a 
-              href="#" 
+            <a
+              href="#"
               onClick={(e) => { e.preventDefault(); scrollToSection('#'); }}
-              className="flex items-center gap-2 group"
+              className="flex items-center group relative h-14 md:h-16 w-auto"
             >
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
-                isScrolled 
-                  ? 'bg-gradient-to-br from-blue-600 to-teal-500' 
-                  : 'bg-white/20 backdrop-blur-sm'
-              }`}>
-                <span className="text-white font-bold text-lg">DC</span>
-              </div>
-              <span className={`text-xl font-bold transition-colors duration-300 ${
-                isScrolled ? 'text-gray-800' : 'text-white'
-              }`}>
-                Digital Company Group
-              </span>
+              <img
+                src="/icon.png"
+                alt="Digital Compny Group"
+                className={`h-full w-auto object-contain transition-all duration-300 ${isScrolled ? '' : 'brightness-0 invert drop-shadow-md'
+                  }`}
+              />
             </a>
 
             {/* Desktop Navigation */}
@@ -97,11 +105,10 @@ export default function Header() {
                   key={link.name}
                   href={link.href}
                   onClick={(e) => { e.preventDefault(); scrollToSection(link.href); }}
-                  className={`font-medium transition-all duration-300 hover:scale-105 ${
-                    isScrolled 
-                      ? 'text-gray-600 hover:text-blue-600' 
+                  className={`font-medium transition-all duration-300 hover:scale-105 ${isScrolled
+                      ? 'text-gray-600 hover:text-blue-600'
                       : 'text-white/90 hover:text-white'
-                  }`}
+                    }`}
                 >
                   {link.name}
                 </a>
@@ -123,9 +130,8 @@ export default function Header() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`lg:hidden p-2 rounded-lg transition-colors ${
-                isScrolled ? 'text-gray-800' : 'text-white'
-              }`}
+              className={`lg:hidden p-2 rounded-lg transition-colors ${isScrolled ? 'text-gray-800' : 'text-white'
+                }`}
             >
               {isMobileMenuOpen ? (
                 <XMarkIcon className="w-6 h-6" />
@@ -172,6 +178,11 @@ export default function Header() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+      />
     </>
   );
 }

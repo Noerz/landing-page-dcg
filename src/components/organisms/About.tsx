@@ -63,8 +63,8 @@ export default function About() {
                 <div className="absolute inset-0 flex items-center justify-center p-8">
                   <div className="text-white text-center">
                     <div className="text-7xl mb-6 animate-float">🚀</div>
-                    <p className="text-2xl font-bold mb-2">IT Solutions</p>
-                    <p className="text-lg opacity-90">Profesional & Terpercaya</p>
+                    <p className="text-2xl font-bold mb-2">SMART SOLUTION</p>
+                    <p className="text-lg opacity-90">for a digital world</p>
                   </div>
                 </div>
                 

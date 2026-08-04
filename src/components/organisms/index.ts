@@ -7,3 +7,4 @@ export { default as CTA } from './CTA';
 export { default as FAQ } from './FAQ';
 export { default as Footer } from './Footer';
 export { default as FloatingWhatsApp } from './FloatingWhatsApp';
+export { default as ContactModal } from './ContactModal';

@@ -14,24 +14,39 @@ export default function Footer() {
   
   const links = [
     { title: 'Layanan', items: [
-      { label: 'CCTV Installation', href: '#' },
-      { label: 'Network Setup', href: '#' },
-      { label: 'IT Procurement', href: '#' },
-      { label: 'Server Maintenance', href: '#' },
+      { label: 'CCTV Installation', href: '#services' },
+      { label: 'Network Setup', href: '#services' },
+      { label: 'IT Procurement', href: '#services' },
+      { label: 'Server Maintenance', href: '#services' },
     ] },
     { title: 'Perusahaan', items: [
-      { label: 'Tentang Kami', href: '#' },
-      { label: 'Tim', href: '#' },
+      { label: 'Tentang Kami', href: '#about' },
       { label: 'Karir', href: '#' },
       { label: 'Blog', href: '#' },
     ] },
     { title: 'Dukungan', items: [
-      { label: 'FAQ', href: '/faq' }, 
-      { label: 'Kontak', href: '#' }, 
+      { label: 'FAQ', href: '#faq' }, 
+      { label: 'Kontak', href: '#contact' }, 
       { label: 'Syarat Layanan', href: '#' }, 
       { label: 'Kebijakan Privasi', href: '#' }
     ] },
   ];
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href === '#contact') {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent('openContactModal'));
+      return;
+    }
+    
+    if (href.startsWith('#') && href !== '#') {
+      e.preventDefault();
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   const socialLinks = [
     { name: 'Facebook', icon: 'F', href: '#' },
@@ -61,14 +76,12 @@ export default function Footer() {
             transition={{ duration: 0.5 }}
             viewport={{ once: true }}
           >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-teal-500 rounded-xl flex items-center justify-center">
-                <span className="text-white font-bold text-lg">DC</span>
-              </div>
-              <div>
-                <span className="text-xl font-bold text-white block">Digital Company Group</span>
-                <span className="text-sm text-gray-400">Group</span>
-              </div>
+            <div className="mb-6 h-16 md:h-20 w-auto inline-block">
+              <img 
+                src="/icon.png" 
+                alt="Digital Company Group"
+                className="h-full w-auto object-contain brightness-0 invert drop-shadow-md"
+              />
             </div>
             <Text color="white" size="base" className="opacity-70 mb-6 max-w-sm leading-relaxed">
               Solusi IT profesional untuk transformasi digital bisnis Anda. Kami berkomitmen memberikan layanan terbaik dengan teknologi terkini.
@@ -105,6 +118,7 @@ export default function Footer() {
                   <li key={item.label}>
                     <a 
                       href={item.href} 
+                      onClick={(e) => handleLinkClick(e, item.href)}
                       className="text-gray-400 hover:text-white text-sm transition-colors duration-300 flex items-center gap-2 group"
                     >
                       <span className="w-0 group-hover:w-2 h-0.5 bg-blue-500 transition-all duration-300" />

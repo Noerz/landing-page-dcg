@@ -230,8 +230,8 @@ export default function Hero() {
                     >
                       🚀
                     </motion.div>
-                    <p className="text-2xl font-bold tracking-wide">IT Solutions</p>
-                    <p className="text-sm opacity-80 mt-1">Profesional & Terpercaya</p>
+                    <p className="text-2xl font-bold tracking-wide">SMART SOLUTION</p>
+                    <p className="text-sm opacity-80 mt-1">for a digital world</p>
                   </div>
                 </div>
               </div>
