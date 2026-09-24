@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
-import { Inter, Plus_Jakarta_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
+  subsets: ["latin"],
   variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const plusJakarta = Plus_Jakarta_Sans({
-  variable: "--font-plus-jakarta",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {
-  title: "Digital Company Group - Solusi IT Profesional",
-  description: "Solusi Jasa IT & Pengadaan Perangkat Teknologi untuk Mendukung Operasional Bisnis Anda",
-  keywords: ["IT Solutions", "CCTV", "Jaringan", "Server", "IT Support", "Bandung"],
+  title: "Digital Company Group — Instalasi CCTV & IT Support Bandung",
+  description:
+    "Jasa instalasi CCTV, jaringan komputer, server, dan pengadaan perangkat IT untuk bisnis di Bandung dan sekitarnya.",
+  keywords: [
+    "CCTV Bandung",
+    "Instalasi Jaringan",
+    "IT Support",
+    "Server",
+    "Pengadaan IT",
+  ],
   authors: [{ name: "Digital Company Group" }],
   icons: {
     icon: "/favicon.svg",
@@ -31,11 +34,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" className="scroll-smooth">
-      <body
-        className={`${inter.variable} ${plusJakarta.variable} font-sans antialiased bg-white text-gray-900`}
-        style={{ fontFamily: 'var(--font-plus-jakarta), var(--font-inter), sans-serif' }}
-      >
+    <html lang="id">
+      <body className={`${inter.variable} font-sans antialiased`}>
         {children}
       </body>
     </html>

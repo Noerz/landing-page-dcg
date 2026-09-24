@@ -1,4 +1,7 @@
-import { Header, FAQ, Footer, FloatingWhatsApp } from "@/components/organisms";
+import { lazy, Suspense } from "react";
+import { Header, FAQ, Footer } from "@/components/organisms";
+
+const FloatingWhatsApp = lazy(() => import("@/components/organisms/FloatingWhatsApp"));
 
 export const metadata = {
   title: "FAQ - Digital Company Group",
@@ -13,7 +16,9 @@ export default function FAQPage() {
       <div className="pt-20" />
       <FAQ />
       <Footer />
-      <FloatingWhatsApp />
+      <Suspense fallback={null}>
+        <FloatingWhatsApp />
+      </Suspense>
     </main>
   );
 }

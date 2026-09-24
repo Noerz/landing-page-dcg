@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["172.29.42.17"],
   images: {
+    formats: ["image/webp"],
     remotePatterns: [
       {
         protocol: "https",
@@ -10,6 +11,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  compress: true,
+  poweredByHeader: false,
 };
 
 export default nextConfig;

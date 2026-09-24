@@ -4,7 +4,7 @@ interface HeadingProps {
   level?: 1 | 2 | 3 | 4 | 5 | 6;
   children: React.ReactNode;
   className?: string;
-  color?: 'white' | 'dark' | 'blue';
+  color?: 'white' | 'dark' | 'blue' | 'muted';
 }
 
 export default function Heading({
@@ -14,13 +14,12 @@ export default function Heading({
   color = 'dark',
 }: HeadingProps) {
   const Tag = `h${level}` as const;
-
   const colorStyles = {
     white: 'text-white',
-    dark: 'text-gray-800',
+    dark: 'text-gray-900',
     blue: 'text-blue-600',
+    muted: 'text-gray-500',
   };
-
   const sizeStyles = {
     1: 'text-4xl md:text-5xl font-bold',
     2: 'text-3xl md:text-4xl font-bold',

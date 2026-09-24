@@ -1,7 +1,7 @@
 interface SectionProps {
   children: React.ReactNode;
   className?: string;
-  bgColor?: 'white' | 'gray' | 'blue' | 'gradient' | 'dark';
+  bgColor?: 'white' | 'gray' | 'blue' | 'dark';
   py?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
   id?: string;
 }
@@ -15,11 +15,9 @@ export default function Section({
 }: SectionProps) {
   const bgColorStyles = {
     white: 'bg-white',
-    gray: 'bg-gray-50',
-    blue: 'bg-blue-600',
-    gradient:
-      'bg-gradient-to-r from-blue-600 via-teal-500 to-green-500 relative overflow-hidden',
-    dark: 'bg-gray-900',
+    gray: 'bg-gray-50 border-y border-gray-100',
+    blue: 'bg-blue-600 text-white',
+    dark: 'bg-gray-900 text-white',
   };
 
   const pyStyles = {

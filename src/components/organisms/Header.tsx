@@ -1,188 +1,169 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { Container, Button } from '../atoms';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
-import { motion, AnimatePresence } from 'framer-motion';
-import ContactModal from './ContactModal';
+import { useEffect, useState, lazy, Suspense } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import Image from "next/image";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Button, Container } from "../atoms";
+
+const ContactModal = lazy(() => import("./ContactModal"));
+
+const navLinks = [
+  { name: "Beranda", href: "#" },
+  { name: "Tentang", href: "#about" },
+  { name: "Layanan", href: "#services" },
+  { name: "Keunggulan", href: "#benefits" },
+];
 
 export default function Header() {
   const pathname = usePathname();
   const router = useRouter();
-  const isHomePage = pathname === '/';
-
-  const [isScrolled, setIsScrolled] = useState(!isHomePage);
+  const isHomePage = pathname === "/";
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
-  useEffect(() => {
-    if (!isHomePage) {
-      setIsScrolled(true);
-      return;
-    }
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
-    };
-    handleScroll();
-    window.addEventListener('scroll', handleScroll);
+  const solidHeader = isScrolled || !isHomePage;
 
+  useEffect(() => {
+    if (!isHomePage) return;
+
+    const handleScroll = () => setIsScrolled(window.scrollY > 24);
     const handleOpenModal = () => setIsContactModalOpen(true);
-    window.addEventListener('openContactModal', handleOpenModal as EventListener);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("openContactModal", handleOpenModal);
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('openContactModal', handleOpenModal as EventListener);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("openContactModal", handleOpenModal);
     };
   }, [isHomePage]);
 
-  const navLinks = [
-    { name: 'Beranda', href: '#' },
-    { name: 'Tentang', href: '#about' },
-    { name: 'Layanan', href: '#services' },
-    { name: 'Keunggulan', href: '#benefits' },
-    { name: 'Kontak', href: '#contact' },
-  ];
-
-  const scrollToSection = (href: string) => {
+  const navigate = (href: string) => {
     setIsMobileMenuOpen(false);
 
-    if (href === '#contact') {
-      setIsContactModalOpen(true);
+    if (!isHomePage) {
+      router.push(href === "#" ? "/" : `/${href}`);
       return;
     }
 
-    if (!isHomePage) {
-      // Navigate to home page, then scroll to section
-      if (href === '#') {
-        router.push('/');
-      } else {
-        router.push('/' + href);
-      }
+    if (href === "#") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
-    if (href === '#') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+
+    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
   };
+
+  const darkHeader = !solidHeader;
 
   return (
     <>
-      <motion.header
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.5 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-lg'
-            : 'bg-transparent'
-          }`}
+      <header
+        className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-200 ${
+          isScrolled
+            ? "border-gray-200 bg-white/95 backdrop-blur-sm"
+            : "border-transparent bg-transparent"
+        }`}
       >
         <Container>
-          <nav className="flex items-center justify-between py-4">
-            {/* Logo */}
+          <nav className="flex h-20 items-center justify-between" aria-label="Navigasi utama">
             <a
               href="#"
-              onClick={(e) => { e.preventDefault(); scrollToSection('#'); }}
-              className="flex items-center group relative h-14 md:h-16 w-auto"
+              onClick={(event) => {
+                event.preventDefault();
+                navigate("#");
+              }}
+              className="relative h-12 w-12"
+              aria-label="Digital Company Group — Beranda"
             >
-              <img
-                src="/icon.png"
-                alt="Digital Compny Group"
-                className={`h-full w-auto object-contain transition-all duration-300 ${isScrolled ? '' : 'brightness-0 invert drop-shadow-md'
-                  }`}
+              <Image
+                src="/icon-96.webp"
+                alt="Digital Company Group"
+                fill
+                priority
+                sizes="48px"
+                className={`object-contain ${darkHeader ? "brightness-0 invert" : ""}`}
               />
             </a>
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-8">
+            <div className="hidden items-center gap-8 lg:flex">
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
-                  onClick={(e) => { e.preventDefault(); scrollToSection(link.href); }}
-                  className={`font-medium transition-all duration-300 hover:scale-105 ${isScrolled
-                      ? 'text-gray-600 hover:text-blue-600'
-                      : 'text-white/90 hover:text-white'
-                    }`}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    navigate(link.href);
+                  }}
+                  className={`text-sm font-medium transition-colors ${
+                    darkHeader
+                      ? "text-gray-300 hover:text-white"
+                      : "text-gray-600 hover:text-gray-950"
+                  }`}
                 >
                   {link.name}
                 </a>
               ))}
             </div>
 
-            {/* CTA Button */}
             <div className="hidden lg:block">
-              <Button
-                variant={isScrolled ? 'primary' : 'outline-white'}
-                size="md"
-                onClick={() => scrollToSection('#contact')}
-                className={isScrolled ? '!bg-gradient-to-r !from-blue-600 !to-teal-500 !text-white !border-0 hover:shadow-lg hover:shadow-blue-500/25' : ''}
-              >
-                Hubungi Kami
-              </Button>
+              <Button onClick={() => setIsContactModalOpen(true)}>Hubungi Kami</Button>
             </div>
 
-            {/* Mobile Menu Button */}
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`lg:hidden p-2 rounded-lg transition-colors ${isScrolled ? 'text-gray-800' : 'text-white'
-                }`}
+              type="button"
+              onClick={() => setIsMobileMenuOpen((open) => !open)}
+              className={`rounded-md p-2 lg:hidden ${darkHeader ? "text-white" : "text-gray-900"}`}
+              aria-expanded={isMobileMenuOpen}
+              aria-label={isMobileMenuOpen ? "Tutup menu" : "Buka menu"}
             >
               {isMobileMenuOpen ? (
-                <XMarkIcon className="w-6 h-6" />
+                <XMarkIcon className="h-6 w-6" />
               ) : (
-                <Bars3Icon className="w-6 h-6" />
+                <Bars3Icon className="h-6 w-6" />
               )}
             </button>
           </nav>
         </Container>
-      </motion.header>
+      </header>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-[72px] z-40 lg:hidden"
+      {isMobileMenuOpen && (
+        <div className="fixed inset-x-4 top-20 z-40 rounded-lg border border-gray-200 bg-white p-3 shadow-lg lg:hidden">
+          {navLinks.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              onClick={(event) => {
+                event.preventDefault();
+                navigate(link.href);
+              }}
+              className="block rounded-md px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            >
+              {link.name}
+            </a>
+          ))}
+          <Button
+            className="mt-2 w-full"
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              setIsContactModalOpen(true);
+            }}
           >
-            <div className="bg-white/95 backdrop-blur-md shadow-xl mx-4 rounded-2xl overflow-hidden">
-              <div className="p-6 space-y-4">
-                {navLinks.map((link) => (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    onClick={(e) => { e.preventDefault(); scrollToSection(link.href); }}
-                    className="block py-3 px-4 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-xl font-medium transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                ))}
-                <Button
-                  variant="primary"
-                  size="lg"
-                  onClick={() => scrollToSection('#contact')}
-                  className="w-full mt-4 !bg-gradient-to-r !from-blue-600 !to-teal-500 !text-white !border-0"
-                >
-                  Hubungi Kami
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            Hubungi Kami
+          </Button>
+        </div>
+      )}
 
-      <ContactModal
-        isOpen={isContactModalOpen}
-        onClose={() => setIsContactModalOpen(false)}
-      />
+      {isContactModalOpen && (
+        <Suspense fallback={null}>
+          <ContactModal
+            isOpen={isContactModalOpen}
+            onClose={() => setIsContactModalOpen(false)}
+          />
+        </Suspense>
+      )}
     </>
   );
 }

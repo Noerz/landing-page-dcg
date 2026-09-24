@@ -1,4 +1,7 @@
-import { Header, Hero, About, Services, Benefits, CTA, Footer, FloatingWhatsApp } from "@/components/organisms";
+import { lazy, Suspense } from "react";
+import { Header, Hero, About, Services, Benefits, CTA, Footer } from "@/components/organisms";
+
+const FloatingWhatsApp = lazy(() => import("@/components/organisms/FloatingWhatsApp"));
 
 export default function Home() {
   return (
@@ -10,7 +13,9 @@ export default function Home() {
       <Benefits />
       <CTA />
       <Footer />
-      <FloatingWhatsApp />
+      <Suspense fallback={null}>
+        <FloatingWhatsApp />
+      </Suspense>
     </main>
   );
 }
